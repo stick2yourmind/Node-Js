@@ -1,11 +1,10 @@
-
 const productsModel = require("../models/productModel");
-
+const categoryModel = require("../models/categoryModel");
 
 module.exports = {
     getAll: async (request, response, next) => {
         try{ 
-            const products = await productsModel.find({});
+            const products = await productsModel.find({}).populate("item_category")
             response.json(products);
         } catch (e){
             next(e);
@@ -27,7 +26,7 @@ module.exports = {
             next(e);
         }
     },
-    create:  (request, response, next) => {
+    create:  async (request, response, next) => {
         try{
             const product = new productsModel({
                                 item_img: request.body.item_img,
@@ -35,10 +34,12 @@ module.exports = {
                                 item_model: request.body.item_model,
                                 item_price: request.body.item_price,
                                 item_sku: request.body.item_sku,
-                                item_available: request.body.item_available   
+                                item_available: request.body.item_available,
+                                item_description: request.body.item_description,
+                                item_category: request.body.item_category  
                             });
-            product.save();
-            response.json(product);
+            const prod = await product.save();
+            response.json(prod);
         } catch (e){
             next(e);
         }

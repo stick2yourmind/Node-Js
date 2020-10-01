@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const productController = require("../controllers/productsController");
+const { request } = require('express');
+const { response } = require('../app');
 
 /* GET all products */
 router.get('/', productController.getAll);
@@ -12,7 +14,7 @@ router.get('/search/:id', productController.getByModel);
 router.get('/:id', productController.getByID);
 
 /* POST a new product */
-router.post('/', productController.create);
+router.post('/',(request, response, next) =>{request.app.validateUser(request, response, next)}, productController.create);
 
 /* PUT to update a product by id */
 router.put('/:id', productController.update);

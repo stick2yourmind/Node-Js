@@ -12,15 +12,25 @@ const productsSchema =  new mongoose.Schema({
         required: true},
     item_price: {
         type: Number,
-        required: true},
+        required: true,
+        get: function(price){
+            return `$ ${price}`
+        }},
     item_sku: {
         type: String,
         required: true,
         unique:true},
     item_available: {
         type: Number,
-        required: true}
+        required: true},
+    item_description: {
+        type: String,
+        required: true},
+    item_category: {
+        type: mongoose.Schema.ObjectId,
+        ref:"categories"
+    }
 
 })
-
+productsSchema.set("toJSON", {getters: true})
 module.exports = mongoose.model('products', productsSchema);
